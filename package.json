@@ -2,7 +2,7 @@
   "name": "with-validation",
   "version": "1.0.0",
   "description": "Higher-order component that validates a form field.",
-  "main": "index.js",
+  "main": "dist/bundle.js",
   "repository": "git@github.com:lsiden/with-validation.git",
   "author": "Lawrence Siden <lsiden@gmail.com>",
   "license": "MIT",
