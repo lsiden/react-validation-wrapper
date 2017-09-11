@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
 
-import WithValidation from '../index'
+import WithValidation from '../src/index'
 
 const debug = require('debug')('with-validation:demo-index')
 
