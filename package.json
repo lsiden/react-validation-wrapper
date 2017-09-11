@@ -1,7 +1,8 @@
 {
   "name": "with-validation",
   "version": "1.0.0",
-  "description": "Higher-order component that validates a form field.",
+  "keywords": ["react-js", "form-validation", "input-validation"],
+  "description": "Higher-order ReactJs component that validates a form field.",
   "main": "dist/index.js",
   "repository": "git@github.com:lsiden/with-validation.git",
   "author": "Lawrence Siden <lsiden@gmail.com>",
