@@ -1,11 +1,20 @@
 const path = require('path')
-let config = {
-	target: 'web',
+
+module.exports = {
+	entry: {
+		app: ['./demo/index.jsx']
+	},
 	output: {
 		filename: 'bundle.js',
 		path: path.resolve(__dirname, 'dist'),
 		publicPath: 'dist'
 	},
+	devServer: {
+		contentBase: path.resolve(__dirname, 'demo'),
+		inline: true,
+	},
+	devtool: "eval-source-map",
+	target: 'web',
 	resolve: {
 		extensions: ['.js', '.jsx', 'json']
 	},
@@ -42,31 +51,3 @@ let config = {
 		],
 	},
 };
-
-if (process.env.NODE_ENV.match(/^prod/i)) {
-	const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-	Object.assign(config, {
-		entry: {
-			app: ['./index.jsx']
-		},
-		plugins: [
-			new UglifyJSPlugin({
-				test: /\.js[x]?$/,
-				sourceMap: true,
-			}),
-		],
-		devtool: "source-map",
-	})
-} else {
-	Object.assign(config, {
-		entry: {
-			app: ['./index.jsx']
-		},
-		devServer: {
-			contentBase: '.',
-			inline: true,
-		},
-		devtool: "eval-source-map",
-	})
-}
-module.exports = config

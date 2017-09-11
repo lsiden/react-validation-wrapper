@@ -41,8 +41,9 @@ export default function(FormInput, ErrorMessage=_ErrorMessage) {
 		}
 
 		onChange(ev) {
-			const newVal = ev.target.value
 			this.props.onChange(ev)
+
+			const newVal = ev.target.value
 			this.updateErrorMessages(newVal)
 			this.setState({
 				value: newVal,
@@ -90,7 +91,7 @@ export default function(FormInput, ErrorMessage=_ErrorMessage) {
 	}
 	WithValidation.defaultProps = {
 		validator: () => '',
-		onChange: () => {},
+		onChange: () => true,
 		value: '',
 	}
 	WithValidation.displayName = `WithValidation(${getDisplayName(FormInput)})`
