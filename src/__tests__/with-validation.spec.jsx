@@ -101,9 +101,8 @@ describe('WithValidation', () => {
 		})
 
 		it('calls onChange property', () => {
-			expect(onChange.mock.calls.length).toBe(0)
+			expect(onChange).not.toHaveBeenCalled()
 			simulateChange(input, '1')
-			expect(onChange.mock.calls.length).toBe(1)
 			expect(onChange.mock.calls[0][0].target.value).toBe('1')
 		})
 
