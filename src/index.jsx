@@ -74,7 +74,7 @@ export default function(FormInput, ErrorMessage=_ErrorMessage) {
 				invalid: this.state.errMsgs.length > 0
 			})
 			return (
-				<div>
+				<div className={'with-validation'}>
 					<FormInput onChange={this.onChange} className={inputClass} {...passProps} />
 					<ErrorMessage messages={this.state.errMsgs} />
 				</div>
