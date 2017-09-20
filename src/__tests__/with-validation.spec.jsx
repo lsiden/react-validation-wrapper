@@ -47,7 +47,7 @@ describe('WithValidation', () => {
 		})
 	})
 
-	describe('with <input>, no onChange property', () => {
+	describe('with <input>', () => {
 
 		function MyInput(props) {
 			return <input type="text" {...props} />
@@ -59,7 +59,7 @@ describe('WithValidation', () => {
 		})
 
 		beforeEach(() => {
-			wrapper = mount(<InputWithValidation validator={validator} />)
+			wrapper = mount(<InputWithValidation className={'my-input'} validator={validator} />)
 			input = wrapper.find('input')
 		})
 
@@ -75,11 +75,21 @@ describe('WithValidation', () => {
 		})
 
 		it('becomes invalid if validator not satisfied', () => {
-			simulateChange(input, '2')
+			// simulateChange(input, '2')
 			simulateChange(input, 'invalid')
 			expect(input.hasClass('invalid')).toBeTruthy()
 			expect(wrapper.find('.input-error').length).toBe(1)
 			expect(wrapper.find('.input-error').text()).toBe('wrong value!')
+		})
+
+		it('does not overwrite other class names on wrapped input', () => {
+			simulateChange(input, 'invalid')
+			expect(input.hasClass('invalid')).toBeTruthy()
+			expect(input.hasClass('my-input')).toBeTruthy()
+
+			simulateChange(input, 'valid')
+			expect(input.hasClass('invalid')).toBeFalsy()
+			expect(input.hasClass('my-input')).toBeTruthy()
 		})
 	})
 

@@ -66,17 +66,17 @@ exports.default = function (FormInput) {
 				var _props = this.props,
 				    onChange = _props.onChange,
 				    validator = _props.validator,
-				    remProps = _objectWithoutProperties(_props, ['onChange', 'validator']);
+				    className = _props.className,
+				    remProps = _objectWithoutProperties(_props, ['onChange', 'validator', 'className']);
 
 				var passProps = _extends({}, remProps);
-
-				if (this.state.errMsgs.length > 0) {
-					passProps.className = 'invalid';
-				}
+				var inputClass = classNames(className, {
+					invalid: this.state.errMsgs.length > 0
+				});
 				return _react2.default.createElement(
 					'div',
 					null,
-					_react2.default.createElement(FormInput, _extends({ onChange: this.onChange }, passProps)),
+					_react2.default.createElement(FormInput, _extends({ onChange: this.onChange, className: inputClass }, passProps)),
 					_react2.default.createElement(ErrorMessage, { messages: this.state.errMsgs })
 				);
 			}
@@ -124,6 +124,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var debug = require('debug')('alc-component:with-validation');
+var classNames = require('classnames');
 
 function _ErrorMessage(_ref) {
 	var messages = _ref.messages;

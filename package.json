@@ -12,6 +12,7 @@
   "author": "Lawrence Siden <lsiden@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "classnames": "^2.2.5",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   },

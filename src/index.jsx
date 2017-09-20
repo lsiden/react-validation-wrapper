@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { isIterable, getDisplayName, areShallowArraysEqual } from './helpers'
 
 const debug = require('debug')('alc-component:with-validation')
+const classNames = require('classnames')
 
 export function _ErrorMessage({messages}) {
 	const content = (messages || []).filter(msg => !!msg).join(', ')
@@ -67,15 +68,14 @@ export default function(FormInput, ErrorMessage=_ErrorMessage) {
 		}
 
 		render() {
-			const { onChange, validator, ...remProps } = this.props
+			const { onChange, validator, className, ...remProps } = this.props
 			const passProps = { ...remProps, }
-
-			if (this.state.errMsgs.length > 0) {
-				passProps.className = 'invalid'
-			}
+			const inputClass = classNames(className, {
+				invalid: this.state.errMsgs.length > 0
+			})
 			return (
 				<div>
-					<FormInput onChange={this.onChange} {...passProps} />
+					<FormInput onChange={this.onChange} className={inputClass} {...passProps} />
 					<ErrorMessage messages={this.state.errMsgs} />
 				</div>
 			)
