@@ -53,7 +53,7 @@
     "test": "DEBUG=with-validation:* DEBUG_DEPTH=3 NODE_ENV=test jest --verbose",
     "test:watch": "yarn test -- --watch",
     "start": "NODE_ENV=dev webpack-dev-server",
-    "build": "NODE_ENV=production babel src/ --out-dir dist/",
+    "build": "NODE_ENV=production babel src/ --ignore __tests__ --out-dir dist/",
     "cloc": "cloc $(git ls-files)"
   }
 }
