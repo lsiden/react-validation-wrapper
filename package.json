@@ -21,6 +21,7 @@
     "babel-core": "^6.26.0",
     "babel-jest": "^21.0.2",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
@@ -28,18 +29,10 @@
     "debug": "^3.0.1",
     "enzyme": "^2.9.1",
     "jest": "^21.0.2",
+    "react-redux": "^5.0.6",
     "react-test-renderer": "^15.6.1",
     "webpack": "^3.5.6",
     "webpack-dev-server": "^2.7.1"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react"
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
   },
   "jest": {
     "transform": {
@@ -53,7 +46,7 @@
     "test": "DEBUG=with-validation:* DEBUG_DEPTH=3 NODE_ENV=test jest --verbose",
     "test:watch": "yarn test -- --watch",
     "start": "NODE_ENV=dev webpack-dev-server",
-    "build": "NODE_ENV=production babel src/ --ignore __tests__ --out-dir dist/",
+    "prepare": "NODE_ENV=production babel src/ --ignore __tests__ --out-dir dist/",
     "cloc": "cloc $(git ls-files)"
   }
 }

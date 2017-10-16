@@ -19,7 +19,7 @@ or
 	}
 
 	// Returns an error-message if invalid, otherwise return empty string.
-	function validateNumber(val, xl8=fallback_xl8) {
+	function validateNumber(val, xl8) {
 		const isValid = val === 0 || !isEmpty(val) && Number.isFinite(Number(val))
 		return isValid ? '' : xl8('Type a valid number')
 	}

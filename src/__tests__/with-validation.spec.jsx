@@ -1,6 +1,7 @@
 import React from 'react';
-import { shallow, mount, render } from 'enzyme';
 import PropTypes from 'prop-types'
+import { shallow, mount, render } from 'enzyme';
+// import { Provider, createStore } from 'react-redux'
 
 import withValidation, { _validate, _ErrorMessage } from '../index'
 
@@ -24,7 +25,7 @@ describe('WithValidation', () => {
 			const wrapper = shallow(<_ErrorMessage messages={messages} />)
 			expect(wrapper.text()).toContain('one')
 			expect(wrapper.text()).toContain('two')
-			expect(wrapper.find('.input-error').length).toBe(1)
+			expect(wrapper.find('.input-error')).toHaveLength(1)
 		})
 	})
 
@@ -65,20 +66,20 @@ describe('WithValidation', () => {
 
 		it('is initially valid', () => {
 			expect(input.hasClass('invalid')).toBeFalsy()
-			expect(wrapper.find('.input-error').length).toBe(0)
+			expect(wrapper.find('.input-error')).toHaveLength(0)
 		})
 
 		it('remains valid after getting a valid value', () => {
 			simulateChange(input, '2')
 			expect(input.hasClass('invalid')).toBeFalsy()
-			expect(wrapper.find('.input-error').length).toBe(0)
+			expect(wrapper.find('.input-error')).toHaveLength(0)
 		})
 
 		it('becomes invalid if validator not satisfied', () => {
 			// simulateChange(input, '2')
 			simulateChange(input, 'invalid')
 			expect(input.hasClass('invalid')).toBeTruthy()
-			expect(wrapper.find('.input-error').length).toBe(1)
+			expect(wrapper.find('.input-error')).toHaveLength(1)
 			expect(wrapper.find('.input-error').text()).toBe('wrong value!')
 		})
 
@@ -120,7 +121,7 @@ describe('WithValidation', () => {
 			simulateChange(input, '2')
 			simulateChange(input, 'invalid')
 			expect(input.hasClass('invalid')).toBeTruthy()
-			expect(wrapper.find('.input-error').length).toBe(1)
+			expect(wrapper.find('.input-error')).toHaveLength(1)
 			expect(wrapper.find('.input-error').text()).toBe('wrong value!')
 		})
 	})
@@ -151,7 +152,7 @@ describe('WithValidation', () => {
 			simulateChange(input, '2')
 			simulateChange(input, 'invalid')
 			expect(input.hasClass('invalid')).toBeTruthy()
-			expect(wrapper.find('.input-error').length).toBe(1)
+			expect(wrapper.find('.input-error')).toHaveLength(1)
 			expect(wrapper.find('.input-error').text()).toBe('wrong value!')
 		})
 	})
@@ -186,53 +187,13 @@ describe('WithValidation', () => {
 		it('calls multiple validators and concatenates messages', () => {
 			simulateChange(input, 123)
 			expect(input.hasClass('invalid')).toBeFalsy()
-			expect(wrapper.find('.input-error').length).toBe(0)
+			expect(wrapper.find('.input-error')).toHaveLength(0)
 
 			simulateChange(input, '')
 			expect(input.hasClass('invalid')).toBeTruthy()
-			expect(wrapper.find('.input-error').length).toBe(1)
+			expect(wrapper.find('.input-error')).toHaveLength(1)
 			expect(wrapper.find('.input-error').text()).toContain(msgMissing)
 			expect(wrapper.find('.input-error').text()).toContain(msgNotANumber)
-		})
-	})
-
-	describe('Re-renders error message on forced update', () => {
-		// Use Case:
-		// Our validator is multi-lingual.
-		// We want it to re-render the error message
-		// after the user changes his language preference.
-
-		function MyInput(props) {
-			return <input type="text" {...props} />
-		}
-		let InputWithValidation, wrapper, input, lang='en'
-		const spErrorMsg = 'falta el valor'
-		const enErrorMsg = 'value is missing'
-
-		function multiLingualRequiredValidator(val) {
-			if (!!val) {
-				return ''
-			} else if (lang === 'sp') {
-				return spErrorMsg
-			} else {
-				return enErrorMsg
-			}
-		}
-
-		beforeAll(() => {
-			InputWithValidation = withValidation(MyInput)
-		})
-
-		beforeEach(() => {
-			wrapper = mount(<InputWithValidation validator={multiLingualRequiredValidator} />)
-			input = wrapper.find('input')
-		})
-
-		it('Re-renders error message in new language after update.', () => {
-			expect(wrapper.find('.input-error').text()).toBe(enErrorMsg)
-			lang = 'sp'
-			wrapper.update()
-			expect(wrapper.find('.input-error').text()).toBe(spErrorMsg)
 		})
 	})
 
@@ -260,12 +221,61 @@ describe('WithValidation', () => {
 		})
 
 		beforeEach(() => {
-			wrapper = mount(<InputWithValidation value="invalid" validator={validator} />)
+			wrapper = mount(<InputWithValidation value={'invalid'} validator={validator} />)
 			input = wrapper.find('input')
 		})
 
 		it('Responds to custom error message argument', () => {
-			expect(wrapper.find('.my-input-error').length).toBe(1)
+			expect(wrapper.find('.my-input-error')).toHaveLength(1)
+		})
+	})
+
+	xdescribe('Behavior when validators property changes', function() {
+		class Translator {
+			constructor(lang='en', dict={}) {
+				this.lang = lang
+				this.dict = dict
+			}
+			xlate(phrase) {
+				dict[phrase] ? dict[phrase] : phrase
+			}
+		}
+		const enTranslator = new Translator()
+		const spTranslator = new Translator('sp', {
+			'required': 'necesario'
+		})
+		function reduceAction(state={}, action) {
+			const { type, ...payload } = action
+			switch(type) {
+			case 'validator':
+				return {...state, ...payload }
+			default:
+				return state
+			}
+		}
+		let store, wrapper, myInputError
+
+		beforeEach(function() {
+			store = createStore(reduceAction, {
+				validator: val => !!val ? '' : enTranslator.xlate('required')
+			})
+			wrapper = mount(
+				<Provider store={store}>
+					<InputWithValidation value={'invalid'} />
+				</Provider>
+			)
+			inputError = wrapper.find('.my-input-error')
+		})
+
+		it('re-renders error message', function() {
+			expect(inputError).toHaveLength(1)
+			expect(inputError.text()).toBe('required')
+
+			store.dispatch({
+				type: 'validator',
+				validator: val => !!val ? '' : spTranslator.xlate('required'),
+			})
+			expect(inputError.text()).toBe('necesario')
 		})
 	})
 })
