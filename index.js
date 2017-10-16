@@ -16,6 +16,10 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _index = require('./src/index');
 
 var _index2 = _interopRequireDefault(_index);
@@ -32,23 +36,26 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-var debug = require('debug')('with-validation:demo-index');
+var debug = require('debug')('with-validation:demo');
 
+var flavors = {
+	choc: 'Chocolate',
+	van: 'Vanilla',
+	neo: 'Neopolitan'
+};
 function selectFlavor(props) {
+	var key = 0;
 	return _react2.default.createElement(
 		'select',
 		props,
-		_react2.default.createElement('option', { value: '' }),
-		_react2.default.createElement(
-			'option',
-			{ value: 'choc' },
-			'Chocolate'
-		),
-		_react2.default.createElement(
-			'option',
-			{ value: 'van' },
-			'Vanilla'
-		)
+		_react2.default.createElement('option', { key: ++key, value: '' }),
+		_lodash2.default.map(flavors, function (flavor, _key) {
+			return _react2.default.createElement(
+				'option',
+				{ key: ++key, value: _key },
+				flavor
+			);
+		})
 	);
 }
 
@@ -122,10 +129,10 @@ var OrderForm = function (_React$Component) {
 				quantity !== '' && flavor !== '' && _react2.default.createElement(
 					'p',
 					null,
-					'You have selected ',
+					'Congratulations! You just ordered ',
 					quantity,
 					' of ',
-					flavor,
+					flavors[flavor],
 					'.'
 				)
 			);
