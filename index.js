@@ -34,7 +34,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 var debug = require('debug')('with-validation:demo-index');
 
-function SelectFlavor(props) {
+function selectFlavor(props) {
 	return _react2.default.createElement(
 		'select',
 		props,
@@ -52,23 +52,23 @@ function SelectFlavor(props) {
 	);
 }
 
-function InputQuantity(_ref) {
+function inputQuantity(_ref) {
 	var validator = _ref.validator,
 	    passProps = _objectWithoutProperties(_ref, ['validator']);
 
 	return _react2.default.createElement('input', _extends({ type: 'text' }, passProps));
 }
 
+var SelectFlavorWithValidation = (0, _index2.default)(selectFlavor);
+var InputQuantityWithValidation = (0, _index2.default)(inputQuantity);
+
 function validateFlavor(val) {
 	return val ? '' : 'You must select a flavor!';
 }
 
 function validateQuantity(val) {
-	return val === 0 || Number.isFinite(Number(val)) ? '' : 'You must type a valid number.';
+	return val !== '' && Number.isFinite(Number(val)) ? '' : 'You must type a valid number.';
 }
-
-var SelectFlavorWithValidation = (0, _index2.default)(SelectFlavor);
-var InputQuantityWithValidation = (0, _index2.default)(InputQuantity);
 
 var OrderForm = function (_React$Component) {
 	_inherits(OrderForm, _React$Component);
@@ -82,6 +82,7 @@ var OrderForm = function (_React$Component) {
 			flavor: '',
 			quantity: ''
 		};
+		_this.onChange = _this.onChange.bind(_this);
 		return _this;
 	}
 
@@ -93,22 +94,40 @@ var OrderForm = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _state = this.state,
+			    quantity = _state.quantity,
+			    flavor = _state.flavor;
+
 			return _react2.default.createElement(
-				'form',
+				'div',
 				null,
 				_react2.default.createElement(
-					'label',
-					{ htmlFor: 'flavor' },
-					'Flavor'
+					'form',
+					null,
+					_react2.default.createElement(
+						'label',
+						{ htmlFor: 'flavor' },
+						'Flavor'
+					),
+					_react2.default.createElement(SelectFlavorWithValidation, { name: "flavor", value: flavor, validator: validateFlavor, onChange: this.onChange }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement(
+						'label',
+						{ htmlFor: 'quantity' },
+						'Quantity'
+					),
+					_react2.default.createElement(InputQuantityWithValidation, { name: "quantity", value: quantity, validator: validateQuantity, onChange: this.onChange })
 				),
-				_react2.default.createElement(SelectFlavorWithValidation, { name: "flavor", value: this.state.flavor, validator: validateFlavor }),
 				_react2.default.createElement('br', null),
-				_react2.default.createElement(
-					'label',
-					{ htmlFor: 'quantity' },
-					'Quantity'
-				),
-				_react2.default.createElement(InputQuantityWithValidation, { name: "quantity", value: this.state.quantity, validator: validateQuantity })
+				quantity !== '' && flavor !== '' && _react2.default.createElement(
+					'p',
+					null,
+					'You have selected ',
+					quantity,
+					' of ',
+					flavor,
+					'.'
+				)
 			);
 		}
 	}]);
