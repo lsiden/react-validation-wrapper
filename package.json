@@ -11,6 +11,17 @@
   "repository": "git@github.com:lsiden/with-validation.git",
   "author": "Lawrence Siden <lsiden@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "DEBUG=with-validation:* DEBUG_DEPTH=3 NODE_ENV=test jest --verbose",
+    "test:watch": "yarn test -- --watch",
+    "start": "NODE_ENV=dev webpack-dev-server --config webpack.dev.js --hot --inline --open",
+    "cloc": "cloc $(git ls-files)",
+    "lint": "eslint src/",
+    "clean": "rimraf gh-pages dist",
+    "prepare": "yarn clean; NODE_ENV=production webpack --config webpack.prod.js",
+    "prepare:demo": "yarn clean; NODE_ENV=development webpack --config webpack.demo.js",
+    "gh-pages": "yarn prepare:demo; node ./prepare-gh-pages.js; gh-pages -d gh-pages"
+  },
   "dependencies": {
     "classnames": "^2.2.5",
     "react": "^15.6.1",
@@ -31,11 +42,15 @@
     "eslint": "^4.9.0",
     "eslint-cli": "^1.1.1",
     "eslint-plugin-react": "^7.4.0",
+    "gh-pages": "^1.0.0",
     "jest": "^21.0.2",
     "react-redux": "^5.0.6",
     "react-test-renderer": "^15.6.1",
     "webpack": "^3.5.6",
-    "webpack-dev-server": "^2.7.1"
+    "webpack-dev-server": "^2.7.1",
+    "webpack-merge": "^4.1.0",
+    "webpack-node-externals": "^1.6.0",
+    "webpack-visualizer-plugin": "^0.1.11"
   },
   "jest": {
     "transform": {
@@ -44,13 +59,5 @@
     "moduleNameMapper": {
       "^.+\\.[s]?css$": "identity-obj-proxy"
     }
-  },
-  "scripts": {
-    "test": "DEBUG=with-validation:* DEBUG_DEPTH=3 NODE_ENV=test jest --verbose",
-    "test:watch": "yarn test -- --watch",
-    "start": "NODE_ENV=dev webpack-dev-server",
-    "prepare": "NODE_ENV=production babel src/ --ignore __tests__ --out-dir dist/",
-    "cloc": "cloc $(git ls-files)",
-    "lint": "eslint src/"
   }
 }
