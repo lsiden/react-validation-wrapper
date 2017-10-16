@@ -1,17 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 
 import WithValidation from './src/index'
 
-const debug = require('debug')('with-validation:demo-index')
+const debug = require('debug')('with-validation:demo')
 
+const flavors = {
+	choc: 'Chocolate',
+	van: 'Vanilla',
+	neo: 'Neopolitan',
+}
 function selectFlavor(props) {
+	let key=0
 	return (
 		<select {...props}>
-			<option value=""></option>
-			<option value="choc">Chocolate</option>
-			<option value="van">Vanilla</option>
+			<option key={++key} value=""></option>
+			{
+				_.map(flavors, (flavor, _key) => (
+					<option key={++key} value={_key}>{flavor}</option>
+				))
+			}
 		</select>
 	)
 }
@@ -62,7 +72,7 @@ class OrderForm extends React.Component {
 				</form>
 				<br/>
 				{	quantity !== '' && flavor !== '' &&
-					<p>You have selected {quantity} of {flavor}.</p>
+					<p>Congratulations! You just ordered {quantity} of {flavors[flavor]}.</p>
 				}
 			</div>
 		)
