@@ -47,50 +47,28 @@ export default function(FormInput, ErrorMessage=_ErrorMessage) {
 
         constructor(props) {
             super(props)
+            const { value, } = props
+            this.state = { value, }
             this.onChange = this.onChange.bind(this)
-            this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this)
-            this.state = {
-                ...props,
-                errMsgs: _validate(props.validator, props.value),
-            }
         }
 
         onChange(ev) {
             const newVal = ev.target.value
             this.props.onChange(ev)
-            this.updateErrorMessages(newVal)
-            this.setState({
-                value: newVal,
-            })
-        }
-
-        componentWillReceiveProps(nextProps) {
-            debug('componenetWillReceiveProps()')
-            debug(nextProps)
-            const { value } = this.props
-            if (nextProps.validator !== this.props.validator) {
-                const errMsgs = _validate(nextProps.validator, value)
-                this.setState({errMsgs})
-            }
-        }
-
-        updateErrorMessages(val) {
-            const errMsgs = _validate(this.props.validator, val)
-
-            if (!areShallowArraysEqual(errMsgs, this.state.errMsgs)) {
-                this.setState({errMsgs: errMsgs, })
-            }
+            this.setState({ value: newVal })
         }
 
         render() {
+            const { value } = this.state
             const { onChange, validator, className, ...passProps } = this.props
+            const errMsgs = _validate(validator, value)
             const inputClass = classNames(className, {
-                invalid: this.state.errMsgs.length > 0
+                invalid: errMsgs.length > 0
             })
             return (
                 <div className={'with-validation'}>
                     <FormInput onChange={this.onChange} className={inputClass} {...passProps} />
-                    <ErrorMessage messages={this.state.errMsgs} />
+                    <ErrorMessage messages={errMsgs} />
                 </div>
             )
         }
