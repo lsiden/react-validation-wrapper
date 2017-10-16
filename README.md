@@ -1,66 +1,6 @@
 # with-validation
 Higher-order component to validate a form field.
 
-## Installation
-
-	npm install with-validation
-
-or
-
-	yarn add with-validation
-
-## Usage
-
-	import withValidation from 'with-validation'
-
-	// Returns an error-message if invalid, otherwise return empty string.
-	function validate_required(val) {
-		return val === '' ? '' : 'A value is required.'
-	}
-
-	// Returns an error-message if invalid, otherwise return empty string.
-	function validateNumber(val, xl8) {
-		const isValid = val === 0 || !isEmpty(val) && Number.isFinite(Number(val))
-		return isValid ? '' : xl8('Type a valid number')
-	}
-
-	function MyInput(props) {
-		return <input type="text" {...props} />
-	}
-	const InputWithValidation = withValidation(MyInput)
-
-	function myForm(props) {
-		return (
-			<form>
-				<!-- with one validator -->
-				<MyInput name="item" validator={validateRequired} />
-				<br />
-
-				<!-- with more than one validator -->
-				<MyInput name="quantity" validator={[validateRequired, validateNumber]} />
-			</form>
-		)
-	}
-
-	// Custom error message element.
-	// messages={ array of error message }
-	function MyErrorMessage({messages}) {
-		const content = (messages || []).filter(msg => !!msg).join(', ')
-		return content ? <span className="input-error">{content}</span> : null
-	}
-	MyErrorMessage.propTypes = {
-		messages: PropTypes.arrayOf(PropTypes.string).isRequired,
-	}
-	const InputWithValidationAndCustomErrorMsg = withValidation(MyInput, MyErrorMessage)
-
-	function myForm(props) {
-		return (
-			<form>
-				<InputWithValidationAndCustomErrorMsg name="item" validator={validateRequired} />
-			</form>
-		)
-	}
-
 ## Description
 
 WithValidation is a method that returns a
@@ -80,15 +20,23 @@ The second argument is a React component that will override the default error me
 It must have a property named "messages" that accepts an array of error messages or null.
 Use this if the default error-message markup is not adequate for your app's needs.
 
-Here is the default ErrorMessage component as an example:
+See ErrorMessage component in [demo.jsx](https://github.com/lsiden/with-validation/blob/master/demo.jsx) as an example.
 
-	export function ErrorMessage({messages}) {
-		const content = (messages || []).filter(msg => !!msg).join(', ')
-		return content ? <span className="input-error">{content}</span> : null
-	}
-	ErrorMessage.propTypes = {
-		messages: PropTypes.arrayOf(PropTypes.string).isRequired,
-	}
+## Installation
+
+	npm install with-validation
+
+or
+
+	yarn add with-validation
+
+## Usage
+
+See [demo.jsx](https://github.com/lsiden/with-validation/blob/master/demo.jsx)
+
+## Demo
+
+See [demo page](https://lsiden.github.io/with-validation/).
 
 ## Author
 Lawrence Siden  
