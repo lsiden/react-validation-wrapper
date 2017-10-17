@@ -7,7 +7,7 @@
     "input-validation"
   ],
   "description": "Higher-order ReactJs component that validates a form field.",
-  "main": "dist/index.js",
+  "main": "dist/bundle.js",
   "repository": "git@github.com:lsiden/with-validation.git",
   "author": "Lawrence Siden <lsiden@gmail.com>",
   "license": "MIT",
